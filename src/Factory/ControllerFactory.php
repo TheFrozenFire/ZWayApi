@@ -16,7 +16,7 @@ class ControllerFactory
     
     public function create($objectNode)
     {
-        $data = $this->genericDataFactory
+        $data = $this->dataFactory
                      ->create($objectNode['data'], new Data\Controller);
         
         $controller = new Controller($data);

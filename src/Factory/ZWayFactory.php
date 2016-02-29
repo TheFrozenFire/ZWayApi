@@ -1,6 +1,8 @@
 <?php
 namespace ZWayApi\Factory;
 
+use ZWayApi\ZWay;
+
 class ZWayFactory
 {
     protected $controllerFactory;

@@ -1,5 +1,5 @@
 <?php
-namespace ZWayApi;
+namespace ZWayApi\Data;
 
 class GenericData
 {

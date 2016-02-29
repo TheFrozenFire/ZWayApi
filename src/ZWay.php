@@ -9,8 +9,8 @@ class ZWay
     
     public function __construct(Controller $controller, $devices)
     {
-        $this->setController($controller);
-        $this->setDevices($devices);
+        $this->controller = $controller;
+        $this->devices = $devices;
     }
     
     public function getController()
