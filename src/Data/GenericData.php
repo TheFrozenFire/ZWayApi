@@ -5,8 +5,6 @@ class GenericData
 {
     protected $value;
     
-    protected $name;
-    
     protected $type;
     
     protected $updateTime;
@@ -16,11 +14,6 @@ class GenericData
     public function getValue()
     {
         return $this->value;
-    }
-    
-    public function getName()
-    {
-        return $this->name;
     }
     
     public function getType()

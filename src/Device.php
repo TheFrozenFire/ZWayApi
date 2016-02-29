@@ -28,6 +28,6 @@ class Device
     
     public function getInstance($instanceId)
     {
-        return $this->instances($instanceId);
+        return $this->instances[$instanceId];
     }
 }

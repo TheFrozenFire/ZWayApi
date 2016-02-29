@@ -8,12 +8,9 @@ class GenericDataFactory implements Hydrator\HydratorAwareInterface
 {
     use Hydrator\HydratorAwareTrait;
     
-    protected $dataValueFactory;
-    
     public function __construct()
     {
         $this->setHydrator(new Hydrator\Reflection);
-        $this->dataValueFactory = new DataValueFactory;
     }
     
     public function create($data, GenericData $object = null)
@@ -24,14 +21,17 @@ class GenericDataFactory implements Hydrator\HydratorAwareInterface
         
         $newData = [];
         foreach($data as $key => $valueData) {
-            $dataValue = $this->dataValueFactory
-                              ->create($valueData);
+            if(is_array($valueData)) {
+                $dataValue = $this->create($valueData);
+            } else {
+                $dataValue = $valueData;
+            }
             
             $newData[$key] = $dataValue;
         }
         
         $this->getHydrator()
-            ->hydrate($data, $object);
+            ->hydrate($newData, $object);
         
         return $object;
     }
