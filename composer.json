@@ -1,0 +1,22 @@
+{
+    "name": "thefrozenfire/zway-api",
+    "description": "Implementation of the Z-Way JSON API",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Justin Martin",
+            "email": "frozenfire@thefrozenfire.com"
+        }
+    ],
+    "require": {
+        "zendframework/zend-http": "^2.5",
+        "zendframework/zend-hydrator": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZWayApi": [
+                "src/"
+            ]
+        }
+    }
+}
