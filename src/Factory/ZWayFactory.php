@@ -19,7 +19,7 @@ class ZWayFactory
                            ->create($objectNode['controller']);
         
         $devices = [];
-        foreach($objectNode['devices'] as $nodeId, $deviceNode) {
+        foreach($objectNode['devices'] as $nodeId => $deviceNode) {
             $device = $this->deviceFactory
                            ->create($deviceNode);
            
