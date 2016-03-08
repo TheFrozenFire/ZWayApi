@@ -3,6 +3,7 @@ namespace ZWayApi;
 
 use Zend\Http\Client as HttpClient;
 use Zend\Http\Request as HttpRequest;
+use Zend\Http\Exception\RuntimeException as HttpRuntimeException;
 
 class Client
 {
@@ -22,14 +23,54 @@ class Client
         $this->httpClient->setAuth($username, $password);
     }
     
-    public function Run()
+    public function Run($command)
     {
+        $uri = "{$this->baseUrl}/Run/{$command}";
         
+        $request = new HttpRequest;
+        $request->setUri($uri);
+        
+        $response = $this->httpClient->send($request);
+        
+        if($response->isSuccess()) {
+            $data = json_decode($response->getBody(), true);
+            if($data === null) {
+                throw new \RuntimeException('Cannot decode API response');
+            }
+            
+            return $data;
+        } else {
+            throw new HttpRuntimeException($response->getBody(), $response->getStatusCode());
+        }
     }
     
     public function InspectQueue()
     {
-    
+        $uri = "{$this->baseUrl}/InspectQueue";
+        
+        $request = new HttpRequest;
+        $request->setUri($uri);
+        
+        $response = $this->httpClient->send($request);
+        
+        if($response->isSuccess()) {
+            $data = json_decode($response->getBody(), true);
+            if($data === null) {
+                throw new \RuntimeException('Cannot decode API response');
+            }
+            
+            $jobs = [];
+            
+            $jobFactory = new Factory\QueueJobFactory;
+            
+            foreach($data as $jobData) {
+                $jobs[] = $jobFactory->create($jobData);
+            }
+            
+            return $jobs;
+        } else {
+            throw new HttpRuntimeException($response->getBody(), $response->getStatusCode());
+        }
     }
     
     public function Data(\DateTime $timestamp = null)
@@ -56,7 +97,7 @@ class Client
                 return (new Factory\ZWayFactory)->create($data);
             }
         } else {
-            throw new \RuntimeException($response->getBody(), $response->getStatusCode());
+            throw new HttpRuntimeException($response->getBody(), $response->getStatusCode());
         }
     }
 }
