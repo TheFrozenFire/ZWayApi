@@ -7,10 +7,13 @@ class ZWay
     
     protected $devices;
     
-    public function __construct(Controller $controller, $devices)
+    protected $updateTime;
+    
+    public function __construct(Controller $controller, $devices, \DateTimeInterface $updateTime)
     {
         $this->controller = $controller;
         $this->devices = $devices;
+        $this->updateTime = $updateTime;
     }
     
     public function getController()
@@ -26,5 +29,10 @@ class ZWay
     public function getDevice($nodeId)
     {
         return $this->devices[$nodeId];
+    }
+    
+    public function getUpdateTime()
+    {
+        return $this->updateTime;
     }
 }

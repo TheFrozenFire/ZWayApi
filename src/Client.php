@@ -2,6 +2,7 @@
 namespace ZWayApi;
 
 use Zend\Http\Client as HttpClient;
+use Zend\Http\Request as HttpRequest;
 
 class Client
 {
@@ -9,61 +10,53 @@ class Client
 
     protected $baseUrl;
     
-    protected $basePath;
-    
-    public function __construct($baseUrl, $basePath = '/ZWaveAPI')
-    {
-        $this->setBaseUrl($baseUrl);
-        $this->setBasePath($basePath);
-        
-        $this->setHttpClient(new HttpClient);
-    }
-    
-    public function run()
-    {
-        
-    }
-    
-    public function inspectQueue()
-    {
-    
-    }
-    
-    public function data()
-    {
-    
-    }
-    
-    public function getHttpClient()
-    {
-        return $this->httpClient;
-    }
-    
-    protected function setHttpClient(HttpClient $httpClient)
-    {
-        $this->httpClient = $httpClient;
-        return $this;
-    }
-    
-    public function getBaseUrl()
-    {
-        return $this->baseUrl;
-    }
-    
-    protected function setBaseUrl($baseUrl)
+    public function __construct($baseUrl, HttpClient $httpClient = null)
     {
         $this->baseUrl = $baseUrl;
-        return $this;
+        
+        $this->httpClient = $httpClient ?: new HttpClient;
     }
     
-    public function getBasePath()
+    public function setCredentials($username, $password)
     {
-        return $this->basePath;
+        $this->httpClient->setAuth($username, $password);
     }
     
-    protected function setBasePath($basePath)
+    public function Run()
     {
-        $this->basePath = $basePath;
-        return $this;
+        
+    }
+    
+    public function InspectQueue()
+    {
+    
+    }
+    
+    public function Data(\DateTime $timestamp = null)
+    {
+        $uri = "{$this->baseUrl}/Data";
+        if($timestamp) {
+            $uri .= "/{$timestamp->format('U')}";
+        }
+    
+        $request = new HttpRequest;
+        $request->setUri($uri);
+        
+        $response = $this->httpClient->send($request);
+        
+        if($response->isSuccess()) {
+            $data = json_decode($response->getBody(), true);
+            if($data === null) {
+                throw new \RuntimeException('Cannot decode API response');
+            }
+            
+            if($timestamp) {
+                return (new Factory\DataUpdateFactory)->create($data);
+            } else {
+                return (new Factory\ZWayFactory)->create($data);
+            }
+        } else {
+            throw new \RuntimeException($response->getBody(), $response->getStatusCode());
+        }
     }
 }

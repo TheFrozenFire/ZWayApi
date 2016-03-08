@@ -28,7 +28,9 @@ class ZWayFactory
             $devices[$nodeId] = $device;
         }
         
-        $zWay = new ZWay($controller, $devices);
+        $updateTime = new \DateTimeImmutable("@{$objectNode['updateTime']}");
+        
+        $zWay = new ZWay($controller, $devices, $updateTime);
         
         return $zWay;
     }
