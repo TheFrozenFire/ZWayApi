@@ -86,7 +86,7 @@ class Controller extends GenericData
     
     public function getSUCNodeId()
     {
-        return $this->sUCNodeId;
+        return $this->SUCNodeId;
     }
     
     public function getZWVersion()
@@ -96,7 +96,7 @@ class Controller extends GenericData
     
     public function getZWaveChip()
     {
-        return $this->zWaveChip;
+        return $this->ZWaveChip;
     }
     
     public function getZWlibMajor()
